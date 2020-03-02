@@ -11,7 +11,7 @@ To run the jar: java -Xmx16g -jar dblp.jar dblp-2017-01-24.hdt dblp-2017-01-01.x
 First argument is the location of the HDT file
 Second argument is the location of the XML file
 Third argument is the location of the DTD file
-Fourth argument is the starting year (icluding) of the period you wish to ambiguate
+Fourth argument is the starting year (including) of the period you wish to ambiguate
 Fifth argument is the ending year (excluding) of the period you wish to ambiguate
 
 The output file will be written to out/... .ttl
