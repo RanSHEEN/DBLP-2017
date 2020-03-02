@@ -1,0 +1,18 @@
+This code was written for ambiguating the DBLP 2017 datadump which can be found here: http://www.rdfhdt.org/datasets/
+
+It requires both the HDT dump and the DBLP XML/DTD files found here: https://dblp.org/xml/release/
+
+Because the HDT is from 2017, it is recommended to take an XML dump and associated DTD from 2017 or later
+
+To compile the code into a jar, run: mvn clean compile assembly:single
+
+To run the jar: java -Xmx16g -jar dblp.jar dblp-2017-01-24.hdt dblp-2017-01-01.xml dblp-2016-10-01.dtd 2014 2017
+
+First argument is the location of the HDT file
+Second argument is the location of the XML file
+Third argument is the location of the DTD file
+Fourth argument is the starting year (icluding) of the period you wish to ambiguate
+Fifth argument is the ending year (excluding) of the period you wish to ambiguate
+
+The output file will be written to out/... .ttl
+
