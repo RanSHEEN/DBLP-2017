@@ -217,16 +217,13 @@ public class AmbiguateDBLP implements Ambiguator {
         ResIterator publications = model.listResourcesWithProperty(typeProperty, pubResource);
         long nrOfPublications = iteratorSize(publications);
 
-        System.out.println("Done ambiguating, new ambiguated file will have:");
+        System.out.println("Done, new ambiguated file will have:");
         System.out.println("Nr of persons: " + nrOfPersons + " (ground truth)");
         System.out.println("Nr of agents: " + nrOfAgents);
         System.out.println("Nr of publications: " + nrOfPublications);
         System.out.println("Writing to file");
-        File outFile = new File("out/dblp-"+minYear+"-"+maxYear+".ttl");
-        if(outFile.getParentFile().mkdirs()) {
-            RDFDataMgr.write(new FileOutputStream(outFile), model, Lang.TURTLE);
-            System.out.println("Done");
-        }
-        else System.err.println("Error writing output file");
+        File outFile = new File("dblp-"+minYear+"-"+maxYear+".ttl");
+        RDFDataMgr.write(new FileOutputStream(outFile), model, Lang.TURTLE);
+        System.out.println("Done");
     }
 }
