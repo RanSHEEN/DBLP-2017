@@ -163,15 +163,17 @@ public class AmbiguateDBLP implements Ambiguator {
                     if(issued < minYear || issued >= maxYear) continue;
 
                     // Create a new unique resource in the ambiguated model every time this person is an author of a publication
-                    // We mark this resource as an "agent" type, i.e. an entity that co-authored this paper
+                    // We mark this resource as an "agent" type, i.e. an entity that (co-)authored this paper
                     final String agentURI = hdtPerson.getURI() + "/" + createUniqueID(hdtPublication.getURI(), hdtPerson.getURI());
                     final Resource agent = model.createResource(agentURI, agentResource);
 
                     // In order to further ambiguate agents, we consult the original DBLP xml for alternative names
                     String name = hdtPerson.getProperty(hdtNameProperty).getLiteral().getString();
                     final Person xmlPerson = xmlModel.getPersonByName(name);
+
                     // If we can find the person in the XML data, we pick a random name
                     name = xmlPerson == null ? name : randomAltName(xmlModel.getPersonByName(name));
+
                     agent.addLiteral(nameProperty, fixName(name));
 
                     // Add a publication resource in the ambiguated model
