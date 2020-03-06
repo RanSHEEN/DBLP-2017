@@ -16,7 +16,7 @@ Fifth argument is the ending year (excluding) of the period you wish to ambiguat
 
 The output file will be written to out/... .ttl
 
-Extracting the ground truth can be done with this SPARQL query:
+Extracting the ground truth can be done by exporting the result of this SPARQL query to CSV:
 
 PREFIX dcterm: <http://purl.org/dc/terms/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
