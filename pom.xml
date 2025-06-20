@@ -10,12 +10,18 @@
 
     <dependencies>
 
-        <dependency>
+        <!-- <dependency>
             <groupId>org.dblp</groupId>
             <artifactId>dblp</artifactId>
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/dblp/mmdb-2019-04-29.jar</systemPath>
+        </dependency> -->
+
+        <dependency>
+            <groupId>org.dblp</groupId>
+            <artifactId>dblp-mmdb</artifactId>
+            <version>2019-04-29</version>
         </dependency>
 
         <dependency>
@@ -27,16 +33,40 @@
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-arq</artifactId>
-            <version>3.6.0</version>
+            <version>4.3.2</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/eu.wdaqua/hdt-jena -->
+        <!-- <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-atlas</artifactId>
+            <version>4.3.2</version>
+        </dependency> -->
+
+        <!-- HDT-Java 核心 API -->
         <dependency>
-            <groupId>eu.wdaqua</groupId>
-            <artifactId>hdt-jena</artifactId>
-            <version>2.1</version>
+            <groupId>org.rdfhdt</groupId>
+            <artifactId>hdt-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.rdfhdt</groupId>
+            <artifactId>hdt-java-core</artifactId>
+            <version>3.0.2</version>
         </dependency>
 
+        <!-- HDT-Jena 绑定 -->
+        <dependency>
+            <groupId>org.rdfhdt</groupId>
+            <artifactId>hdt-jena</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- CLI 工具（可选，如果你要在 Jar 里打入 HDTTools） -->
+        <dependency>
+            <groupId>org.rdfhdt</groupId>
+            <artifactId>hdt-java-cli</artifactId>
+            <version>3.0.2</version>
+        </dependency>
 
         <!-- Logging -->
         <dependency>
@@ -54,31 +84,27 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.uu.nl.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <finalName>dblp</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                    <id>shade-all</id>
+                    <phase>package</phase>
+                    <goals><goal>shade</goal></goals>
+                    <configuration>
+                        <!-- 不生成 dependency-reduced POM -->
+                        <createDependencyReducedPom>false</createDependencyReducedPom>
+                        <!-- 把你的 Main 类写进 Manifest -->
+                        <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>org.uu.nl.Main</mainClass>
+                        </transformer>
+                        </transformers>
+                    </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
-
 </project>

@@ -36,3 +36,11 @@ dblp <- fread(file = "~/Downloads/dblp_authors.csv", select = c(1:2), header = T
 dblp <- dblp[, .(author = unlist(strsplit(authors, ",", fixed = T))), by = person]
 dblp <- dblp[, .(author, id = as.numeric(substr(person, str_length(person) - 3, str_length(person))), person = substr(person, 0, str_length(person) - 5))]
 
+
+
+//////////////////////////////////////////////////////////////////////
+*UPDATE*
+
+To compile : `mvn clean compile`
+
+To run by `run.sh`, do : `./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017`
