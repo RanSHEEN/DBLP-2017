@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-set -e  # 脚本遇到错误自动退出
-set -x  # 打印执行的每条命令（调试用）
+set -e  # Script auto-exits when it encounters an error
+set -x  # Print each command executed (for debugging)
 
-### === 配置 JVM 参数 ===
+### === Configuring JVM parameters ===
 JAVA_OPTS=(
   -Djdk.xml.totalEntitySizeLimit=0
   -Djdk.xml.entityExpansionLimit=0
@@ -15,14 +15,14 @@ JAVA_OPTS=(
 
 echo "Using JAVA_OPTS: ${JAVA_OPTS[@]}"
 
-### === 检查 JAR 文件存在 ===
+### === Checking for JAR file presence ===
 JAR_PATH="target/dblp-1.0-SNAPSHOT.jar"
 if [ ! -f "$JAR_PATH" ]; then
   echo "[ERROR] JAR file not found: $JAR_PATH"
   exit 1
 fi
 
-### === 判断参数数量并执行 ===
+### === Judge the number of arguments and execute ===
 if [ "$#" -eq 1 ]; then
   echo "[INFO] Running in HDT-only mode..."
   java "${JAVA_OPTS[@]}" -cp "$JAR_PATH" org.uu.nl.Main "$1"

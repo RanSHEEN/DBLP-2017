@@ -61,7 +61,7 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- CLI 工具（可选，如果你要在 Jar 里打入 HDTTools） -->
+        <!--  CLI tools (optional, if you want to type HDTTools in Jar) -->
         <dependency>
             <groupId>org.rdfhdt</groupId>
             <artifactId>hdt-java-cli</artifactId>
