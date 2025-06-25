@@ -1,46 +1,162 @@
-This code was written for ambiguating the DBLP 2017 datadump which can be found here: http://www.rdfhdt.org/datasets/
+This project is a debugged version of Jurian's dblp tool: https://github.com/Jurian/dblp
 
-It requires both the HDT dump and the DBLP XML/DTD files found here: https://dblp.org/xml/release/
+# DBLP Ambiguation Tool
 
-Because the HDT is from 2017, it is recommended to take an XML dump and associated DTD from 2017 or later
+This project provides a Java-based tool for performing author disambiguation on the DBLP 2017 datadump using HDT and XML/DTD inputs.
 
-To compile the code into a jar, run: mvn clean compile assembly:single
+---
 
-To run the jar: java -Xmx16g -jar dblp.jar dblp-2017-01-24.hdt dblp-2017-01-01.xml dblp-2016-10-01.dtd 2014 2017
+## Table of Contents
 
-First argument is the location of the HDT file
-Second argument is the location of the XML file
-Third argument is the location of the DTD file
-Fourth argument is the starting year (including) of the period you wish to ambiguate
-Fifth argument is the ending year (excluding) of the period you wish to ambiguate
+* [Overview](#overview)
+* [Prerequisites](#prerequisites)
+* [Data Sources](#data-sources)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Ground Truth Extraction](#ground-truth-extraction)
+* [Example Workflow](#example-workflow)
+* [Update](#update)
+* [License](#license)
 
-The output file will be written to out/... .ttl
+---
 
-Extracting the ground truth can be done by exporting the result of this SPARQL query to CSV:
+## Overview
 
+The ambiguity of author names in bibliographic datasets can hinder accurate analysis. This tool:
+
+1. Loads the DBLP 2017 HDT dump
+2. Parses the associated XML and DTD files
+3. Extracts and clusters author entities by publication period
+4. Outputs a clean Turtle (`.ttl`) file containing disambiguated author records
+
+---
+
+## Prerequisites
+
+* **Java 8+** (with at least 16 GB heap for large datasets)
+* **Maven 3.6+**
+* **R** (optional, for downstream analysis and ground truth processing)
+
+---
+
+## Data Sources
+
+1. **HDT Dump (2017):** [rdfhdt.org/datasets](http://www.rdfhdt.org/datasets/)
+2. **DBLP XML & DTD:** [dblp.org/xml/release](https://dblp.org/xml/release/)
+
+> **Note:** Use XML and DTD files from 2017 or later to match the HDT version.
+
+---
+
+## Installation
+
+Clone this repository and build the `jar`:
+
+```bash
+git clone https://github.com/RanSHEEN/DBLP-2017.git
+cd DBLP-2017
+mvn clean compile assembly:single
+```
+
+This produces `target/dblp-ambig.jar`.
+
+---
+
+## Usage
+
+Run the jar with the following arguments:
+
+```bash
+java -Xmx16g -jar target/dblp-ambig.jar \
+  <HDT_FILE> <XML_FILE> <DTD_FILE> <START_YEAR> <END_YEAR>
+```
+
+| Argument       | Description                                                           |
+| -------------- | --------------------------------------------------------------------- |
+| `<HDT_FILE>`   | Path to the DBLP HDT dump (e.g., `dblp-2017-01-24.hdt`)               |
+| `<XML_FILE>`   | Path to the DBLP XML dump (e.g., `dblp-2017-01-01.xml`)               |
+| `<DTD_FILE>`   | Path to the DTD file (e.g., `dblp-2016-10-01.dtd`)                    |
+| `<START_YEAR>` | Inclusive start of the publication period to ambiguate (e.g., `2014`) |
+| `<END_YEAR>`   | Exclusive end of the period (e.g., `2017`)                            |
+
+The output Turtle files are written under the `out/` directory.
+
+---
+
+## Ground Truth Extraction
+
+To generate a CSV of true author–person mappings, run this SPARQL query against your output dataset and export as CSV:
+
+```sparql
 PREFIX dcterm: <http://purl.org/dc/terms/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX foaf:   <http://xmlns.com/foaf/0.1/>
 
-SELECT ?person (GROUP_CONCAT(?author;SEPARATOR=",") AS ?authors)
+SELECT ?person (GROUP_CONCAT(?author; SEPARATOR=",") AS ?authors)
 WHERE {
   ?person a foaf:Person .
   ?author dcterm:identifier ?person .
-} GROUP BY ?person
+}
+GROUP BY ?person
+```
 
-Afterwards you can for example modify the result in R to fit a particular supervised disambiguation algorithm:
+You can then process the CSV in R:
 
+```r
 library(data.table)
 library(stringr)
 
-dblp <- fread(file = "~/Downloads/dblp_authors.csv", select = c(1:2), header = T)
-dblp <- dblp[, .(author = unlist(strsplit(authors, ",", fixed = T))), by = person]
-dblp <- dblp[, .(author, id = as.numeric(substr(person, str_length(person) - 3, str_length(person))), person = substr(person, 0, str_length(person) - 5))]
+dblp <- fread("~/Downloads/dblp_authors.csv", select = 1:2)
+
+# Split concatenated authors into rows
+dblp <- dblp[, .(
+  author = unlist(strsplit(authors, ",", fixed = TRUE))
+), by = person]
+
+# Extract numeric ID and base URI
+dblp <- dblp[, .(
+  author,
+  id = as.integer(substr(person, str_length(person) - 3, str_length(person))),
+  person = substr(person, 1, str_length(person) - 5)
+)]
+```
+
+---
+
+## Example Workflow
+
+```bash
+# 1. Build
+mvn clean compile assembly:single
+
+# 2. Run
+./run.sh dblp-2017-01-24.hdt dblp-2017-01-01.xml dblp-2016-10-01.dtd 2014 2017
+
+# 3. Extract truth
+# (use SPARQL and R as shown above)
+```
+
+---
+
+## Update
+
+* **Build without assembly**:
+
+  ```
+  mvn clean compile
+  ```
+* **Run via helper script**:
+
+  ```
+  ./run.sh <HDT> <XML> <DTD> <start> <end>
+  ```
+  If you have the documents : 
+  ```
+  ./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017
+  ```
 
 
+---
 
-//////////////////////////////////////////////////////////////////////
-*UPDATE*
+## License
 
-To compile : `mvn clean compile`
-
-To run by `run.sh`, do : `./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017`
+This project is released under the MIT License. See [LICENSE](LICENSE) for details.

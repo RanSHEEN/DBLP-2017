@@ -42,7 +42,7 @@
             <version>4.3.2</version>
         </dependency> -->
 
-        <!-- HDT-Java 核心 API -->
+        <!-- HDT-Java Core API -->
         <dependency>
             <groupId>org.rdfhdt</groupId>
             <artifactId>hdt-api</artifactId>
@@ -54,14 +54,14 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- HDT-Jena 绑定 -->
+        <!-- HDT-Jena 绑定  -->
         <dependency>
             <groupId>org.rdfhdt</groupId>
             <artifactId>hdt-jena</artifactId>
             <version>3.0.2</version>
         </dependency>
 
-        <!--  CLI tools (optional, if you want to type HDTTools in Jar) -->
+        <!-- CLI tools (optional, if you want to type HDTTools in Jar) -->
         <dependency>
             <groupId>org.rdfhdt</groupId>
             <artifactId>hdt-java-cli</artifactId>
@@ -93,9 +93,9 @@
                     <phase>package</phase>
                     <goals><goal>shade</goal></goals>
                     <configuration>
-                        <!-- 不生成 dependency-reduced POM -->
+                        <!-- No dependency-reduced POM generation -->
                         <createDependencyReducedPom>false</createDependencyReducedPom>
-                        <!-- 把你的 Main 类写进 Manifest -->
+                        <!-- Write your Main class into Manifest. -->
                         <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                             <mainClass>org.uu.nl.Main</mainClass>
