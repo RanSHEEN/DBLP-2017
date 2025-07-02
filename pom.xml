@@ -8,6 +8,12 @@
     <artifactId>dblp</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <!-- 设置 Java 编译版本为 1.8 或更高 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <dependencies>
 
         <!-- <dependency>

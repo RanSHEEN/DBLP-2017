@@ -66,17 +66,18 @@ public class Main {
         new HDTGraph(hdt).close();
         System.out.println("Done.");
       }
-      else if (args.length == 5) {
+      else if (args.length == 6) {
         // ambiguity mode
         Ambiguator ambiguator = new AmbiguateDBLP(
-          args[0], args[1], args[2], args[3], args[4]
+          args[0], args[1], args[2], args[3], args[4], args[5]
         );
         ambiguator.ambiguate();
       }
       else {
         System.err.println("Usage:\n" +
           "  To build index: Main <file.hdt>\n" +
-          "  To run pipeline: Main <hdt> <xml> <dtd> <startYear> <endYear>");
+          "  To run pipeline: Main <hdt> <xml> <dtd> <startYear> <endYear> <noisePct>\n" +
+          "    <noisePct> integer 0-100, Percentage of authors' names randomly replaced");
         System.exit(1);
       }
     }

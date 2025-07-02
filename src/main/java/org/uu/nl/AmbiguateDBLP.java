@@ -49,8 +49,16 @@ public class AmbiguateDBLP implements Ambiguator {
     private final long minYear;
     private final long maxYear;
     private final Model hdtModel;
+    private final double noisePercentage;
 
-    public AmbiguateDBLP(String hdtFilename, String dblpXmlFilename, String dblpDtdFilename, String yearFrom, String yearTo) throws IOException, NoSuchAlgorithmException, SAXException {
+    public AmbiguateDBLP(
+        String hdtFilename, 
+        String dblpXmlFilename, 
+        String dblpDtdFilename, 
+        String yearFrom, 
+        String yearTo,
+        String noisePct
+        ) throws IOException, NoSuchAlgorithmException, SAXException {
 
         // we need to raise entityExpansionLimit because the dblp.xml has millions of entities
         System.setProperty("entityExpansionLimit", "10000000");
@@ -61,6 +69,8 @@ public class AmbiguateDBLP implements Ambiguator {
 
         minYear = Long.parseLong(yearFrom);
         maxYear = Long.parseLong(yearTo);
+        // parse noise percentage (0-100) to a [0,1] fraction
+        this.noisePercentage = Math.max(0.0, Math.min(1.0, Double.parseDouble(noisePct) / 100.0));
 
         System.out.println("Loading HDT file");
         final HDT hdt = HDTManager.loadIndexedHDT(hdtFilename, null);
@@ -172,7 +182,11 @@ public class AmbiguateDBLP implements Ambiguator {
                     final Person xmlPerson = xmlModel.getPersonByName(name);
 
                     // If we can find the person in the XML data, we pick a random name
-                    name = xmlPerson == null ? name : randomAltName(xmlModel.getPersonByName(name));
+                    // name = xmlPerson == null ? name : randomAltName(xmlModel.getPersonByName(name));
+                    // Introduce noise: with probability noisePercentage, pick a random alt name
+                    if (xmlPerson != null && Math.random() < noisePercentage) {
+                        name = randomAltName(xmlPerson);
+                    }
 
                     agent.addLiteral(nameProperty, fixName(name));
 

@@ -27,14 +27,14 @@ if [ "$#" -eq 1 ]; then
   echo "[INFO] Running in HDT-only mode..."
   java "${JAVA_OPTS[@]}" -cp "$JAR_PATH" org.uu.nl.Main "$1"
 
-elif [ "$#" -eq 5 ]; then
-  echo "[INFO] Running in full mode with HDT + XML + DTD + years..."
+elif [ "$#" -eq 6 ]; then
+  echo "[INFO] Running in full mode with HDT + XML + DTD + years + noise%..."
   java "${JAVA_OPTS[@]}" -jar "$JAR_PATH" "$@"
 
 else
   echo "[ERROR] Invalid arguments."
   echo "Usage:"
   echo "  ./run.sh <dblp.hdt>"
-  echo "  ./run.sh <dblp.hdt> <dblp.xml> <dblp.dtd> <year1> <year2>"
+  echo "  ./run.sh <dblp.hdt> <dblp.xml> <dblp.dtd> <year1> <year2> <noisePct>"
   exit 2
 fi

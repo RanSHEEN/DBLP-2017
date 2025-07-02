@@ -52,7 +52,7 @@ The ambiguity of author names in bibliographic datasets can hinder accurate anal
 
 Clone this repository and build the `jar`:
 
-```bash
+```
 git clone https://github.com/RanSHEEN/DBLP-2017.git
 cd DBLP-2017
 mvn clean compile assembly:single
@@ -66,9 +66,9 @@ This produces `target/dblp-ambig.jar`.
 
 Run the jar with the following arguments:
 
-```bash
+```
 java -Xmx16g -jar target/dblp-ambig.jar \
-  <HDT_FILE> <XML_FILE> <DTD_FILE> <START_YEAR> <END_YEAR>
+  <HDT_FILE> <XML_FILE> <DTD_FILE> <START_YEAR> <END_YEAR> <NOISE_PCT>
 ```
 
 | Argument       | Description                                                           |
@@ -124,12 +124,12 @@ dblp <- dblp[, .(
 
 ## Example Workflow
 
-```bash
+```
 # 1. Build
 mvn clean compile assembly:single
 
 # 2. Run
-./run.sh dblp-2017-01-24.hdt dblp-2017-01-01.xml dblp-2016-10-01.dtd 2014 2017
+./run.sh dblp-2017-01-24.hdt dblp-2017-01-01.xml dblp-2016-10-01.dtd 2014 2017 20
 
 # 3. Extract truth
 # (use SPARQL and R as shown above)
@@ -147,11 +147,11 @@ mvn clean compile assembly:single
 * **Run via helper script**:
 
   ```
-  ./run.sh <HDT> <XML> <DTD> <start> <end>
+  ./run.sh <HDT> <XML> <DTD> <start> <end> <noise_pct>
   ```
   If you have the documents : 
   ```
-  ./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017
+  ./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017 20
   ```
 
 
