@@ -153,6 +153,15 @@ mvn clean compile assembly:single
   ```
   ./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017 20
   ```
+* **Convert RDF file to .nt file**
+ 
+  ```
+  ~/apache-jena-4.10.0/bin/riot \
+  --syntax=TURTLE \
+  --output=N-TRIPLES \
+  /path/to/file/dblp-2014-2017.ttl \
+  > /path/to/file/dblp-2014-2017-20noisePct.nt
+  ```
 
 
 ---
