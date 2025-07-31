@@ -101,7 +101,7 @@ GROUP BY ?person
 
 You can then process the CSV in R:
 
-```r
+```
 library(data.table)
 library(stringr)
 
@@ -143,6 +143,7 @@ mvn clean compile assembly:single
 
   ```
   mvn clean compile
+  mvn clean package
   ```
 * **Run via helper script**:
 
@@ -152,6 +153,11 @@ mvn clean compile assembly:single
   If you have the documents : 
   ```
   ./run.sh dblp-20170124.hdt dblp-2017-01-01.xml dblp.dtd 2014 2017 20
+  ```
+  Run in background : 
+  ```
+  nohup ./run.sh dblp-2024-12-02.nt dblp-2024-12-02.xml dblp.dtd 2023 2024 20 > run.log 2>&1 &
+  tail -f run.log
   ```
 * **Convert RDF file to .nt file**
  

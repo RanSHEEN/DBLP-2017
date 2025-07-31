@@ -48,6 +48,13 @@
             <version>4.3.2</version>
         </dependency> -->
 
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-tdb2</artifactId>
+            <version>4.3.2</version> <!-- 根据你 jena-core 版本匹配 -->
+        </dependency>
+
+
         <!-- HDT-Java Core API -->
         <dependency>
             <groupId>org.rdfhdt</groupId>
